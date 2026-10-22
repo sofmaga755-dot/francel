@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celular Virtual AU - Multi-App</title>
+    <title>Celular Virtual AU Personalizado</title>
     <style>
-        /* Estilos generales */
         body {
             background-color: #1a1a1a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -17,7 +16,6 @@
             overflow: hidden;
         }
 
-        /* Estructura del Celular */
         .celular {
             width: 360px;
             height: 740px;
@@ -31,7 +29,6 @@
             flex-direction: column;
         }
 
-        /* Barra de estado superior */
         .barra-estado {
             height: 30px;
             background-color: rgba(0, 0, 0, 0.4);
@@ -44,18 +41,16 @@
             z-index: 20;
         }
 
-        .pantalla {
-            flex: 1;
-            position: relative;
-        }
+        .pantalla { flex: 1; position: relative; }
 
         /* -----------------------------------------
-           PANTALLA DE INICIO (HOME)
+           1. FONDO DE PANTALLA PRINCIPAL
         ----------------------------------------- */
         .home-screen {
             width: 100%;
             height: 100%;
-            background-image: url('https://picsum.photos'); /* Foto de fondo por defecto */
+            /* ⚠️ PEGA AQUÍ TU FONDO DE INICIO */
+            background-image: url('CAMBIA_ESTO_POR_EL_LINK_DE_TU_FONDO_PRINCIPAL.jpg'); 
             background-size: cover;
             background-position: center;
             display: grid;
@@ -68,13 +63,8 @@
             z-index: 1;
         }
 
-        /* Estilo de los Iconos */
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
+        /* Iconos */
+        .app-container { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .app-icon {
             width: 55px;
             height: 55px;
@@ -84,30 +74,18 @@
             align-items: center;
             font-size: 26px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            transition: transform 0.1s;
         }
-        .app-container:active .app-icon { transform: scale(0.9); }
         .app-label {
-            color: white;
-            font-size: 11px;
-            margin-top: 5px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            font-weight: 500;
-            text-align: center;
+            color: white; font-size: 11px; margin-top: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-weight: 500;
         }
 
-        /* Colores de los iconos simulados */
-        .icon-mensajes { background-color: #25D366; } /* Verde tipo WhatsApp */
-        .icon-llamadas { background-color: #007AFF; } /* Azul teléfono */
-        .icon-fotos { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); } /* Estilo Galería/Insta */
-        .icon-notas { background-color: #FFCC00; } /* Amarillo bloc de notas */
+        .icon-mensajes { background-color: #25D366; }
+        .icon-llamadas { background-color: #007AFF; }
 
-        /* -----------------------------------------
-           ESTRUCTURA GENERAL DE LAS APPS
-        ----------------------------------------- */
+        /* Estructura de las Apps */
         .app-screen {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             position: absolute;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
@@ -115,143 +93,147 @@
             flex-direction: column;
             z-index: 10;
             box-sizing: border-box;
-            padding-top: 30px; /* Para no tapar la barra de estado */
+            padding-top: 30px;
         }
         .app-screen.activa { transform: translateY(0); }
         
         .app-header {
-            padding: 15px;
-            font-weight: bold;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
+            padding: 15px; font-weight: bold; font-size: 18px;
+            display: flex; align-items: center;
             border-bottom: 1px solid rgba(250,250,250,0.1);
         }
-        .app-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
+        .app-body { flex: 1; overflow-y: auto; padding: 15px; }
+
+        /* -----------------------------------------
+           2. FONDO DEL CHAT (WHATSAPP)
+        ----------------------------------------- */
+        #app-mensajes { 
+            /* ⚠️ PEGA AQUÍ EL FONDO PARA EL CHAT */
+            background-image: url('CAMBIA_ESTO_POR_EL_LINK_DEL_FONDO_DE_CHAT.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #e9edef; 
+        }
+        
+        /* Cabecera del chat con la foto del personaje */
+        .chat-header-user { display: flex; align-items: center; gap: 10px; }
+        .chat-avatar-header {
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            /* ⚠️ FOTO DE TU PERSONAJE EN LA BARRA DE ARRIBA */
+            background-image: url('CAMBIA_ESTO_POR_LA_FOTO_DE_TU_PERSONAJE.jpg');
         }
 
-        /* 1. APP MENSAJES (Estilo Chat) */
-        #app-mensajes { background-color: #0b141a; color: #e9edef; }
-        .chat-bubble {
-            max-width: 75%;
-            padding: 8px 12px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+        .chat-body-container { display: flex; flex-direction: column; height: 100%; }
+        .chat-bubble { max-width: 75%; padding: 8px 12px; border-radius: 12px; margin-bottom: 10px; font-size: 14px; }
         .bubble-recibido { background-color: #202c33; align-self: flex-start; margin-right: auto;}
         .bubble-enviado { background-color: #005c4b; align-self: flex-end; margin-left: auto; }
 
-        /* 2. APP LLAMADAS */
-        #app-llamadas { background-color: #000; color: #fff; text-align: center; }
-        .avatar-llamada { width: 100px; height: 100px; background-color: #333; border-radius: 50%; margin: 40px auto 20px auto; display: flex; justify-content: center; align-items: center; font-size: 40px;}
+        /* -----------------------------------------
+           3. PANTALLA DE LLAMADA
+        ----------------------------------------- */
+        #app-llamadas { background-color: #111; color: #fff; text-align: center; }
+        .avatar-llamada { 
+            width: 110px; height: 110px; 
+            border-radius: 50%; 
+            margin: 50px auto 20px auto; 
+            background-size: cover;
+            background-position: center;
+            /* ⚠️ FOTO EN GRANDE DE TU PERSONAJE LLAMANDO */
+            background-image: url('CAMBIA_ESTO_POR_LA_FOTO_DE_TU_PERSONAJE.jpg');
+        }
         .nombre-llamada { font-size: 24px; font-weight: bold; }
         .estado-llamada { color: #4CD964; font-size: 14px; margin-top: 5px; animation: parpadeo 1.5s infinite; }
         @keyframes parpadeo { 50% { opacity: 0; } }
-        .botones-llamada { display: flex; justify-content: center; gap: 40px; margin-top: 80px; }
-        .btn-colgar { width: 60px; height: 60px; background-color: #FF3B30; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; }
+        .botones-llamada { display: flex; justify-content: center; margin-top: 80px; }
+        .btn-colgar { width: 65px; height: 65px; background-color: #FF3B30; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; }
 
-        /* 3. APP FOTOS (Galería) */
-        #app-fotos { background-color: #fff; color: #000; }
-        .grid-fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-        .foto-item { width: 100%; aspect-ratio: 1; background-size: cover; background-position: center; background-color: #eee; border-radius: 4px; }
-
-        /* 4. APP NOTAS */
-        #app-notas { background-color: #f4f4f9; color: #333; }
-        .nota-papel { background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-height: 150px; font-size: 15px; line-height: 1.6; border-left: 5px solid #FFCC00; }
-
-        /* Barra de navegación inferior física del Celular */
-        .barra-navegacion {
-            height: 40px;
-            background-color: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 30;
-        }
-        .boton-home {
-            width: 50px;
-            height: 5px;
-            background-color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            opacity: 0.6;
-        }
-        .boton-home:hover { opacity: 1; }
+        .barra-navegacion { height: 40px; background-color: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 30; }
+        .boton-home { width: 50px; height: 5px; background-color: #fff; border-radius: 10px; cursor: pointer; opacity: 0.6; }
     </style>
 </head>
 <body>
 
     <div class="celular">
-        <!-- Barra de estado superior -->
         <div class="barra-estado">
             <span id="hora">12:00</span>
-            <span>📶 🔋 98%</span>
+            <span>📶 🔋 95%</span>
         </div>
 
-        <!-- Cuerpo de Pantallas -->
         <div class="pantalla">
-            
-            <!-- PANTALLA PRINCIPAL CON ICONOS -->
+            <!-- PANTALLA PRINCIPAL -->
             <div class="home-screen">
-                
-                <!-- Icono Mensajes -->
                 <div class="app-container" onclick="abrirApp('app-mensajes')">
                     <div class="app-icon icon-mensajes">💬</div>
                     <div class="app-label">Mensajes</div>
                 </div>
 
-                <!-- Icono Llamadas -->
                 <div class="app-container" onclick="abrirApp('app-llamadas')">
                     <div class="app-icon icon-llamadas">📞</div>
                     <div class="app-label">Teléfono</div>
                 </div>
-
-                <!-- Icono Fotos -->
-                <div class="app-container" onclick="abrirApp('app-fotos')">
-                    <div class="app-icon icon-fotos">🖼️</div>
-                    <div class="app-label">Fotos</div>
-                </div>
-
-                <!-- Icono Notas -->
-                <div class="app-container" onclick="abrirApp('app-notas')">
-                    <div class="app-icon icon-notas">📝</div>
-                    <div class="app-label">Notas</div>
-                </div>
-
             </div>
 
-            <!-- PANTALLA: MENSAJES -->
+            <!-- APP MENSAJES -->
             <div class="app-screen" id="app-mensajes">
-                <div class="app-header">Chat: Personaje AU</div>
-                <div class="app-body" style="display: flex; flex-direction: column;">
-                    <div class="chat-bubble bubble-recibido">Hola! ¿Viste lo que subieron a X hoy temprano?</div>
-                    <div class="chat-bubble bubble-enviado">Sii, no lo puedo creer jaja. ¿Es real?</div>
-                    <div class="chat-bubble bubble-recibido">Aparentemente sí... tenemos que hablar de esto luego.</div>
+                <div class="app-header">
+                    <div class="chat-header-user">
+                        <div class="chat-avatar-header"></div>
+                        <!-- CAMBIA AQUÍ EL NOMBRE DE TU PERSONAJE -->
+                        <span>Nombre Personaje</span> 
+                    </div>
+                </div>
+                <div class="app-body">
+                    <div class="chat-body-container">
+                        <!-- CAMBIA AQUÍ LOS CHATS -->
+                        <div class="chat-bubble bubble-recibido">¿Hola? ¿Estás ahí?</div>
+                        <div class="chat-bubble bubble-enviado">Sí, dime qué pasó.</div>
+                        <div class="chat-bubble bubble-recibido">Tenemos un problema grave... lo de la apuesta se descubrió.</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- PANTALLA: LLAMADAS -->
+            <!-- APP LLAMADAS -->
             <div class="app-screen" id="app-llamadas">
                 <div class="app-body">
-                    <div class="avatar-llamada">👤</div>
-                    <div class="nombre-llamada">Mamá</div>
-                    <div class="estado-llamada">Llamada entrante...</div>
-                    
+                    <div class="avatar-llamada"></div>
+                    <!-- CAMBIA EL NOMBRE DE QUIEN LLAMA -->
+                    <div class="nombre-llamada">Nombre Personaje</div>
+                    <div class="estado-llamada">Llamando...</div>
                     <div class="botones-llamada">
                         <div class="btn-colgar" onclick="cerrarTodasLasApps()">❌</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- PANTALLA: FOTOS -->
-            <div class="app-screen" id="app-fotos">
-                <div class="app-header">Galería de Fotos</div>
-                <div class="app-body">
-                    <div class="grid-fotos">
-                        <!-- Puedes cambiar los links de abajo por fotos reales de tu AU -->
-                        
+        <div class="barra-navegacion">
+            <div class="boton-home" onclick="cerrarTodasLasApps()"></div>
+        </div>
+    </div>
+
+    <script>
+        function actualizarHora() {
+            const ahora = new Date();
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes();
+            minutos = minutos < 10 ? '0' + minutos : minutos;
+            document.getElementById('hora').innerText = `${horas}:${minutos}`;
+        }
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
+
+        function abrirApp(idApp) {
+            cerrarTodasLasApps();
+            document.getElementById(idApp).classList.add('activa');
+        }
+
+        function cerrarTodasLasApps() {
+            const apps = document.querySelectorAll('.app-screen');
+            apps.forEach(app => app.classList.remove('activa'));
+        }
+    </script>
+</body>
+</html>
