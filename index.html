@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celular Virtual AU</title>
+    <style>
+        /* Estilos generales de la página */
+        body {
+            background-color: #1a1a1a;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Estructura del Celular */
+        .celular {
+            width: 360px;
+            height: 740px;
+            background-color: #000;
+            border: 12px solid #333;
+            border-radius: 40px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra de estado superior */
+        .barra-estado {
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        /* Contenedor de Pantallas */
+        .pantalla {
+            flex: 1;
+            position: relative;
+        }
+
+        /* PANTALLA DE INICIO (HOME) */
+        .home-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #2b5876, #4e4376); /* Fondo degradado */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 40px;
+            align-items: center;
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+
+        /* Icono de la App de X/Twitter */
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #000; /* Fondo negro de X */
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        .app-icon:active { transform: scale(0.9); }
+        .app-icon img { width: 35px; height: 35px; }
+        .app-label { color: white; font-size: 12px; margin-top: 6px; font-weight: 500; }
+
+        /* PANTALLA INTERNA DE LA APP (OCULTA POR DEFECTO) */
+        .app-screen {
+            width: 100%;
+            height: 100%;
+            background-color: #15202b; /* Azul oscuro estilo Twitter */
+            position: absolute;
+            transform: translateY(100%); /* Escondida abajo */
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        /* Cuando la app se activa, sube a su posición */
+        .app-screen.activa {
+            transform: translateY(0);
+        }
+
+        /* Contenido simulado de Twitter/X */
+        .app-header {
+            padding: 15px;
+            border-bottom: 1px solid #38444d;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .feed {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .tweet {
+            border-bottom: 1px solid #38444d;
+            padding: 12px 0;
+            display: flex;
+            gap: 10px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+        }
+        .tweet-content { flex: 1; }
+        .tweet-user { font-weight: bold; font-size: 14px; }
+        .tweet-handle { color: #8899a6; font-size: 13px; font-weight: normal; }
+        .tweet-text { font-size: 14px; margin-top: 4px; line-height: 1.4; color: #fff; }
+
+        /* Botón de Inicio físico (Barra inferior de navegación) */
+        .barra-navegacion {
+            height: 40px;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        .boton-home {
+            width: 50px;
+            height: 5px;
+            background-color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .boton-home:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="celular">
+        <!-- Barra superior del teléfono -->
+        <div class="barra-estado">
+            <span id="hora">12:00</span>
+            <span>📶 🔋 100%</span>
+        </div>
+
+        <!-- Pantalla del celular -->
+        <div class="pantalla">
+            
+            <!-- HOME / PANTALLA PRINCIPAL -->
+            <div class="home-screen">
+                <!-- Icono de X -->
+                <div class="app-icon" id="icono-x">
+                    <!-- SVG de la X de Twitter -->
+                    <svg viewBox="0 0 24 24" width="35" height="35" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                </div>
+                <div class="app-label">X</div>
+            </div>
+
+            <!-- APP DE X / TWITTER SIMULADA -->
+            <div class="app-screen" id="pantalla-x">
+                <div class="app-header">Inicio</div>
+                <div class="feed">
+                    
+                    <!-- Tweet de ejemplo 1 -->
+                    <div class="tweet">
+                        <div class="avatar" style="background: url('https://placehold.co') fill;"></div>
+                        <div class="tweet-content">
+                            <span class="tweet-user">Nombre Personaje <span class="tweet-handle">@user_au · 2min</span></span>
+                            <div class="tweet-text">No van a creer lo que acaba de pasar hoy en la cafetería... 😳 #MiHistoriaAU</div>
+                        </div>
+                    </div>
+
+                    <!-- Tweet de ejemplo 2 -->
+                    <div class="tweet">
+                        <div class="avatar"></div>
+                        <div class="tweet-content">
+                            <span class="tweet-user">Mejor Amigo <span class="tweet-handle">@friend_au · 10min</span></span>
+                            <div class="tweet-text">¿¡Por qué nunca me contestas las llamadas!? Cuéntame ya mismo.</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="barra-navegacion">
+            <div class="boton-home" id="btn-home" title="Ir al Inicio"></div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para actualizar la hora real del celular
+        function actualizarHora() {
+            const ahora = new Date();
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes();
+            minutos = minutos < 10 ? '0' + minutos : minutos;
+            document.getElementById('hora').innerText = `${horas}:${minutos}`;
+        }
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
+
+        // Variables de las pantallas y botones
+        const iconoX = document.getElementById('icono-x');
+        const pantallaX = document.getElementById('pantalla-x');
+        const btnHome = document.getElementById('btn-home');
+
+        // Acción: Abrir la app de X al tocar el icono
+        iconoX.addEventListener('click', () => {
+            pantallaX.classList.add('activa');
+        });
+
+        // Acción: Volver al menú de inicio al tocar la barra de abajo
+        btnHome.addEventListener('click', () => {
+            pantallaX.classList.remove('activa');
+        });
+    </script>
+</body>
+                                                                   </html>
+                                                                   
