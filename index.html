@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celular Virtual AU</title>
+    <title>Celular Virtual AU - Multi-App</title>
     <style>
-        /* Estilos generales de la página */
+        /* Estilos generales */
         body {
             background-color: #1a1a1a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -14,6 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         /* Estructura del Celular */
@@ -33,108 +34,144 @@
         /* Barra de estado superior */
         .barra-estado {
             height: 30px;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.4);
             color: #fff;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
             font-size: 12px;
-            z-index: 10;
+            z-index: 20;
         }
 
-        /* Contenedor de Pantallas */
         .pantalla {
             flex: 1;
             position: relative;
         }
 
-        /* PANTALLA DE INICIO (HOME) */
+        /* -----------------------------------------
+           PANTALLA DE INICIO (HOME)
+        ----------------------------------------- */
         .home-screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, #2b5876, #4e4376); /* Fondo degradado */
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding-top: 40px;
-            align-items: center;
+            background-image: url('https://picsum.photos'); /* Foto de fondo por defecto */
+            background-size: cover;
+            background-position: center;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: max-content;
+            gap: 20px;
+            padding: 40px 20px 20px 20px;
+            box-sizing: border-box;
             position: absolute;
-            transition: transform 0.3s ease;
+            z-index: 1;
         }
 
-        /* Icono de la App de X/Twitter */
+        /* Estilo de los Iconos */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
         .app-icon {
-            width: 60px;
-            height: 60px;
-            background-color: #000; /* Fondo negro de X */
-            border-radius: 12px;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 26px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: transform 0.1s;
         }
-        .app-icon:active { transform: scale(0.9); }
-        .app-icon img { width: 35px; height: 35px; }
-        .app-label { color: white; font-size: 12px; margin-top: 6px; font-weight: 500; }
+        .app-container:active .app-icon { transform: scale(0.9); }
+        .app-label {
+            color: white;
+            font-size: 11px;
+            margin-top: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            font-weight: 500;
+            text-align: center;
+        }
 
-        /* PANTALLA INTERNA DE LA APP (OCULTA POR DEFECTO) */
+        /* Colores de los iconos simulados */
+        .icon-mensajes { background-color: #25D366; } /* Verde tipo WhatsApp */
+        .icon-llamadas { background-color: #007AFF; } /* Azul teléfono */
+        .icon-fotos { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); } /* Estilo Galería/Insta */
+        .icon-notas { background-color: #FFCC00; } /* Amarillo bloc de notas */
+
+        /* -----------------------------------------
+           ESTRUCTURA GENERAL DE LAS APPS
+        ----------------------------------------- */
         .app-screen {
             width: 100%;
             height: 100%;
-            background-color: #15202b; /* Azul oscuro estilo Twitter */
             position: absolute;
-            transform: translateY(100%); /* Escondida abajo */
-            transition: transform 0.3s ease;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
             display: flex;
             flex-direction: column;
-            color: white;
+            z-index: 10;
+            box-sizing: border-box;
+            padding-top: 30px; /* Para no tapar la barra de estado */
         }
-
-        /* Cuando la app se activa, sube a su posición */
-        .app-screen.activa {
-            transform: translateY(0);
-        }
-
-        /* Contenido simulado de Twitter/X */
+        .app-screen.activa { transform: translateY(0); }
+        
         .app-header {
             padding: 15px;
-            border-bottom: 1px solid #38444d;
             font-weight: bold;
             font-size: 18px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(250,250,250,0.1);
         }
-        .feed {
+        .app-body {
             flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
         }
-        .tweet {
-            border-bottom: 1px solid #38444d;
-            padding: 12px 0;
-            display: flex;
-            gap: 10px;
-        }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #555;
-            border-radius: 50%;
-        }
-        .tweet-content { flex: 1; }
-        .tweet-user { font-weight: bold; font-size: 14px; }
-        .tweet-handle { color: #8899a6; font-size: 13px; font-weight: normal; }
-        .tweet-text { font-size: 14px; margin-top: 4px; line-height: 1.4; color: #fff; }
 
-        /* Botón de Inicio físico (Barra inferior de navegación) */
+        /* 1. APP MENSAJES (Estilo Chat) */
+        #app-mensajes { background-color: #0b141a; color: #e9edef; }
+        .chat-bubble {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .bubble-recibido { background-color: #202c33; align-self: flex-start; margin-right: auto;}
+        .bubble-enviado { background-color: #005c4b; align-self: flex-end; margin-left: auto; }
+
+        /* 2. APP LLAMADAS */
+        #app-llamadas { background-color: #000; color: #fff; text-align: center; }
+        .avatar-llamada { width: 100px; height: 100px; background-color: #333; border-radius: 50%; margin: 40px auto 20px auto; display: flex; justify-content: center; align-items: center; font-size: 40px;}
+        .nombre-llamada { font-size: 24px; font-weight: bold; }
+        .estado-llamada { color: #4CD964; font-size: 14px; margin-top: 5px; animation: parpadeo 1.5s infinite; }
+        @keyframes parpadeo { 50% { opacity: 0; } }
+        .botones-llamada { display: flex; justify-content: center; gap: 40px; margin-top: 80px; }
+        .btn-colgar { width: 60px; height: 60px; background-color: #FF3B30; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; }
+
+        /* 3. APP FOTOS (Galería) */
+        #app-fotos { background-color: #fff; color: #000; }
+        .grid-fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        .foto-item { width: 100%; aspect-ratio: 1; background-size: cover; background-position: center; background-color: #eee; border-radius: 4px; }
+
+        /* 4. APP NOTAS */
+        #app-notas { background-color: #f4f4f9; color: #333; }
+        .nota-papel { background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-height: 150px; font-size: 15px; line-height: 1.6; border-left: 5px solid #FFCC00; }
+
+        /* Barra de navegación inferior física del Celular */
         .barra-navegacion {
             height: 40px;
             background-color: rgba(0,0,0,0.8);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10;
+            z-index: 30;
         }
         .boton-home {
             width: 50px;
@@ -142,7 +179,7 @@
             background-color: #fff;
             border-radius: 10px;
             cursor: pointer;
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .boton-home:hover { opacity: 1; }
     </style>
@@ -150,86 +187,71 @@
 <body>
 
     <div class="celular">
-        <!-- Barra superior del teléfono -->
+        <!-- Barra de estado superior -->
         <div class="barra-estado">
             <span id="hora">12:00</span>
-            <span>📶 🔋 100%</span>
+            <span>📶 🔋 98%</span>
         </div>
 
-        <!-- Pantalla del celular -->
+        <!-- Cuerpo de Pantallas -->
         <div class="pantalla">
             
-            <!-- HOME / PANTALLA PRINCIPAL -->
+            <!-- PANTALLA PRINCIPAL CON ICONOS -->
             <div class="home-screen">
-                <!-- Icono de X -->
-                <div class="app-icon" id="icono-x">
-                    <!-- SVG de la X de Twitter -->
-                    <svg viewBox="0 0 24 24" width="35" height="35" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                
+                <!-- Icono Mensajes -->
+                <div class="app-container" onclick="abrirApp('app-mensajes')">
+                    <div class="app-icon icon-mensajes">💬</div>
+                    <div class="app-label">Mensajes</div>
                 </div>
-                <div class="app-label">X</div>
+
+                <!-- Icono Llamadas -->
+                <div class="app-container" onclick="abrirApp('app-llamadas')">
+                    <div class="app-icon icon-llamadas">📞</div>
+                    <div class="app-label">Teléfono</div>
+                </div>
+
+                <!-- Icono Fotos -->
+                <div class="app-container" onclick="abrirApp('app-fotos')">
+                    <div class="app-icon icon-fotos">🖼️</div>
+                    <div class="app-label">Fotos</div>
+                </div>
+
+                <!-- Icono Notas -->
+                <div class="app-container" onclick="abrirApp('app-notas')">
+                    <div class="app-icon icon-notas">📝</div>
+                    <div class="app-label">Notas</div>
+                </div>
+
             </div>
 
-            <!-- APP DE X / TWITTER SIMULADA -->
-            <div class="app-screen" id="pantalla-x">
-                <div class="app-header">Inicio</div>
-                <div class="feed">
+            <!-- PANTALLA: MENSAJES -->
+            <div class="app-screen" id="app-mensajes">
+                <div class="app-header">Chat: Personaje AU</div>
+                <div class="app-body" style="display: flex; flex-direction: column;">
+                    <div class="chat-bubble bubble-recibido">Hola! ¿Viste lo que subieron a X hoy temprano?</div>
+                    <div class="chat-bubble bubble-enviado">Sii, no lo puedo creer jaja. ¿Es real?</div>
+                    <div class="chat-bubble bubble-recibido">Aparentemente sí... tenemos que hablar de esto luego.</div>
+                </div>
+            </div>
+
+            <!-- PANTALLA: LLAMADAS -->
+            <div class="app-screen" id="app-llamadas">
+                <div class="app-body">
+                    <div class="avatar-llamada">👤</div>
+                    <div class="nombre-llamada">Mamá</div>
+                    <div class="estado-llamada">Llamada entrante...</div>
                     
-                    <!-- Tweet de ejemplo 1 -->
-                    <div class="tweet">
-                        <div class="avatar" style="background: url('https://placehold.co') fill;"></div>
-                        <div class="tweet-content">
-                            <span class="tweet-user">Nombre Personaje <span class="tweet-handle">@user_au · 2min</span></span>
-                            <div class="tweet-text">No van a creer lo que acaba de pasar hoy en la cafetería... 😳 #MiHistoriaAU</div>
-                        </div>
+                    <div class="botones-llamada">
+                        <div class="btn-colgar" onclick="cerrarTodasLasApps()">❌</div>
                     </div>
-
-                    <!-- Tweet de ejemplo 2 -->
-                    <div class="tweet">
-                        <div class="avatar"></div>
-                        <div class="tweet-content">
-                            <span class="tweet-user">Mejor Amigo <span class="tweet-handle">@friend_au · 10min</span></span>
-                            <div class="tweet-text">¿¡Por qué nunca me contestas las llamadas!? Cuéntame ya mismo.</div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
-        </div>
-
-        <!-- Barra de navegación inferior -->
-        <div class="barra-navegacion">
-            <div class="boton-home" id="btn-home" title="Ir al Inicio"></div>
-        </div>
-    </div>
-
-    <script>
-        // Lógica para actualizar la hora real del celular
-        function actualizarHora() {
-            const ahora = new Date();
-            let horas = ahora.getHours();
-            let minutos = ahora.getMinutes();
-            minutos = minutos < 10 ? '0' + minutos : minutos;
-            document.getElementById('hora').innerText = `${horas}:${minutos}`;
-        }
-        setInterval(actualizarHora, 1000);
-        actualizarHora();
-
-        // Variables de las pantallas y botones
-        const iconoX = document.getElementById('icono-x');
-        const pantallaX = document.getElementById('pantalla-x');
-        const btnHome = document.getElementById('btn-home');
-
-        // Acción: Abrir la app de X al tocar el icono
-        iconoX.addEventListener('click', () => {
-            pantallaX.classList.add('activa');
-        });
-
-        // Acción: Volver al menú de inicio al tocar la barra de abajo
-        btnHome.addEventListener('click', () => {
-            pantallaX.classList.remove('activa');
-        });
-    </script>
-</body>
-                                                                   </html>
-                                                                   
+            <!-- PANTALLA: FOTOS -->
+            <div class="app-screen" id="app-fotos">
+                <div class="app-header">Galería de Fotos</div>
+                <div class="app-body">
+                    <div class="grid-fotos">
+                        <!-- Puedes cambiar los links de abajo por fotos reales de tu AU -->
+                        
